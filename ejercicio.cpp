@@ -5,9 +5,7 @@ using namespace std;
 struct nodo{
     int valor;
     shared_ptr<nodo> siguiente;
-//Nodo(int valor) : dato(valor), siguiente(nullptr) {}
 };
-//hola
 
 struct lista_enlazada{
     shared_ptr<nodo> head;
@@ -19,38 +17,77 @@ shared_ptr <nodo> create_node(int val){
     return make_shared<nodo>(val);
 }
 
-void push_front(lista_enlazada lista, int val){
+void push_front(lista_enlazada& lista, int val){
     shared_ptr<nodo> nuevonodo = create_node(val);
     nuevonodo -> valor = val;
-    nuevonodo -> siguiente = lista.head;
+    if (lista.tamanio == 0){
+        nuevonodo -> siguiente = NULL;
+        lista.tail = nuevonodo;
+    }
+    else nuevonodo -> siguiente = lista.head;
     lista.head = nuevonodo;
     lista.tamanio ++;
-
-    if (lista.tail == NULL) lista.tail = nuevonodo;
 }
 
-void push_back(lista_enlazada lista, int val){
+void push_back(lista_enlazada& lista, int val){
     shared_ptr<nodo> nuevonodo = create_node(val);
     nuevonodo -> valor = val;
     nuevonodo -> siguiente = NULL;
 
-    if (lista.tail != NULL){
-    lista.tail -> siguiente = nuevonodo;
-    }
-    else{
+    if (lista.tamanio == 0){
         lista.head = nuevonodo;
     }
-    lista.tail = nuevonodo;
+    else lista.tail -> siguiente = nuevonodo;
 
+    lista.tail = nuevonodo;
     lista.tamanio ++;
     }
 
+void insert(lista_enlazada& lista, int val, int indice){
+    if (lista.tamanio == 0){ //la lista esta vacia
+        push_front(lista, val);
+        return;
+    }
+    if (indice > lista.tamanio){ //indice invalido
+        cout << "indice invalido" << endl;
+        push_back(lista, val);
+        return;
+    }
+    if (indice == 0) {
+        push_front(lista, val); //insertamos al inicio
+        return;
+    }
+    if (indice == lista.tamanio) {
+        push_back(lista, val); //insertamos al final
+        return;
+    }
+
+    //insertamos al medio
+    shared_ptr<nodo> curr = lista.head;
+    int contador = 0;
+    while (contador < indice - 1){
+        curr = curr -> siguiente;
+        contador++;
+    } //nos paramos en el nodo anterior a la insercion
+
+    shared_ptr<nodo> nuevonodo = create_node(val);
+    nuevonodo -> valor = val;
+    shared_ptr<nodo> temp = curr -> siguiente;
+    curr -> siguiente = nuevonodo;
+    nuevonodo -> siguiente = temp;
+    lista.tamanio++;
+}
+
+void print_list(lista_enlazada lista){
+    shared_ptr<nodo> curr = lista.head;
+    while (curr != NULL){
+        cout << to_string(curr -> valor) + " -> ";
+        curr = curr -> siguiente;
+    }
+}
+
 /*
-iv. insert(): inserta un nodo en la posición que se le pase a la función. Si se le pasa
-una posición mayor al largo de la lista, se debe indicar lo ocurrido y se debe de
-agregar el nodo al final de la lista.
 v. erase(): borra un nodo en la posición que se le pase a la función. Similar a la
 función insert(), si la posición es mayor que el largo de la lista, se debe de borrar
 el último nodo.
-vi. print_list(): imprime la lista completa, separando el valor en cada nodo con “->”.
 */
