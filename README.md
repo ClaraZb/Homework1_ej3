@@ -1,2 +1,5 @@
 # Homework1_ej3
-hola
+
+Para ejecutar:
+g++ ejercicio.cpp -Wall -g -o ej
+./ej
