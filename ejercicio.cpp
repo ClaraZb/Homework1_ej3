@@ -101,7 +101,7 @@ void erase(lista_enlazada& lista, int indice){
     if (lista.tamanio == 0) return; // lista vacia
     if (indice >= lista.tamanio) indice = lista.tamanio - 1; //indice invalido
 
-    auto curr = lista.head;
+    shared_ptr<nodo> curr = lista.head;
     if (indice == 0){ // borramos el primer nodo
         if (lista.tamanio == 1) {
             lista.tail = NULL;
@@ -119,7 +119,7 @@ void erase(lista_enlazada& lista, int indice){
         contador++;
     } // nos paramos en el nodo anterior al nodo a borrar
 
-    auto temp = curr -> siguiente;
+    shared_ptr<nodo> temp = curr -> siguiente;
     curr -> siguiente = temp -> siguiente;
     temp -> siguiente = NULL;
     if (indice == lista.tamanio - 1) lista.tail = curr; //borramos el ultimo nodo    
